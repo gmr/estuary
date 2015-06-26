@@ -1,0 +1,20 @@
+%YAML 1.2
+---
+# AWS Configuration for S3 uploads
+aws:
+  access_key_id: AKIAJG7IY3I5TQ43GYPA
+  secret_access_key: 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
+  s3bucket: com-aweber-estuary
+
+rabbitmq:
+  host: rabbit1.int.csh
+  port: 5672
+  vhost: /
+  user: guest
+  password: guest
+  queue: estuary
+
+schema_path: schema
+
+# Target should be one of s3 or directory
+target: s3

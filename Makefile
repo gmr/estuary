@@ -1,7 +1,8 @@
 PROJECT=estuary
 REBAR=bin/rebar
+RELX=bin/relx
 
-all: get-deps compile escriptize
+all: get-deps compile
 
 build-plt:
 	@dialyzer --build_plt --output_plt ~/.$(PROJECT).plt \
@@ -19,12 +20,12 @@ compile:
 dialyze:
 	@dialyzer ebin/*.beam --plt ~/.$(PROJECT).plt -I include
 
+dist:
+	@( $(RELX) )
+
 doc:
 	@echo "Running rebar doc..."
 	@$(REBAR) skip_deps=true doc
-
-escriptize:
-	@( $(REBAR) escriptize )
 
 eunit:
 	@echo "Running rebar eunit..."
@@ -34,7 +35,7 @@ get-deps:
 	@( $(REBAR) get-deps )
 
 run:
-	@( erl +W w -pa ebin deps/*/ebin -config rel/dev.config -sname estuary -sync log all -s estuary )
+	@( erl +W w -pa ebin deps/*/ebin -config rel/sys.config -sname estuary -sync log all -s estuary )
 
 test: all eunit
 

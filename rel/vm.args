@@ -1,0 +1,6 @@
+## Name of the node
+-sname estuary
+-setcookie estuary
+-smp enable
++K true
++A 64

@@ -9,6 +9,6 @@ ebin
 erl_crash.dump
 estuary
 logs
-rel
+_rel
 schema
-config.yaml
+estuary.yaml

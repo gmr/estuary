@@ -1,17 +1,7 @@
 Estuary
 =======
 Estuary is an application for relaying Avro datum consumed from a RabbitMQ queue,
-and storing them in Avro container files locally or in Aazon S3.
-
-Usage
------
-.. code::
-
-    Usage: ./estuary [-c <config>] [-i <initialize>] [-h <help>]
-
-      -c, --config      Config file
-      -i, --initialize  initialize missing resources
-      -h, --help        display this help and exit
+and storing them in Avro container files locally or in Amazon S3.
 
 Example Configuration
 ---------------------
