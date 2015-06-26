@@ -1,0 +1,14 @@
+.eunit
+deps
+*.o
+*.beam
+*.plt
+.rebar
+.idea
+ebin
+erl_crash.dump
+estuary
+logs
+rel
+schema
+config.yaml

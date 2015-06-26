@@ -1,0 +1,22 @@
+{application, estuary, [
+  {description, "Aggregate Avro datum on the wire into containers in S3"},
+  {vsn, "0.1.0"},
+  {registered, []},
+  {applications, [
+    kernel,
+    stdlib,
+    crypto,
+    ssl,
+    lager,
+    folsom,
+    rabbit_common,
+    amqp_client,
+    erlcloud,
+    eavro,
+    yamerl
+  ]},
+  {mod, {estuary, []}},
+  {env, [
+    {sasl, [{sasl_error_logger, {file, "logs/sasl.log"}}]}
+  ]}
+]}.
