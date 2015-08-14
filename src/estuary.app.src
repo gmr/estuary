@@ -13,7 +13,8 @@
     amqp_client,
     erlcloud,
     eavro,
-    yamerl
+    yamerl,
+    worker_pool
   ]},
   {mod, {estuary, []}},
   {env, [

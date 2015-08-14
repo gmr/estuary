@@ -30,7 +30,10 @@ start_link(Config) ->
 %% ?CHILD(estuary_s3, worker, [proplists:get_value("aws", Config)])
 
 init([Config]) ->
-  io:format("Estuary v0.0.0 started~n"),
+  {ok, Vsn} = application:get_key(estuary, vsn),
+  lager:info("Estuary v~s started", [Vsn]),
   {ok, {{one_for_one, 5, 10},
-        [?CHILD(estuary_s3, worker, [proplists:get_value("aws", Config)]),
-         ?CHILD(estuary_amqp, worker, [proplists:get_value("rabbitmq", Config)])]}}.
+        [?CHILD(estuary_aggregator, worker, []),
+         ?CHILD(estuary_avro, worker, [proplists:get_value("avro", Config, [])]),
+         ?CHILD(estuary_s3, worker, [proplists:get_value("aws", Config, [])]),
+         ?CHILD(estuary_amqp, worker, [proplists:get_value("rabbitmq", Config, [])])]}}.

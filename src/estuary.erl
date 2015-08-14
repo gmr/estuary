@@ -25,13 +25,13 @@ start() ->
 %% @end
 %%
 start(_Type, _Args) ->
-  io:format("cwd: ~p~n", [file:get_cwd()]),
+  lager:debug("cwd: ~p", [file:get_cwd()]),
   case find_configuration(?PATHS) of
     {ok, File} ->
       {ok, Config} = read_config(File),
       estuary_sup:start_link(Config);
     not_found ->
-      io:format("Error: Could not find configuration~n"),
+      lager:error("Error: Could not find configuration"),
       {stop, missing_configuration}
   end.
 
@@ -41,7 +41,7 @@ stop(_Reason) ->
 
 find_configuration([]) -> not_found;
 find_configuration([File|Files]) ->
-  io:format("Checking if ~p is a file: ~p~n", [File, filelib:is_file(File)]),
+  lager:debug("Checking if ~p is a file: ~p", [File, filelib:is_file(File)]),
   case filelib:is_file(File) of
     true -> {ok, File};
     false -> find_configuration(Files)
