@@ -4,6 +4,8 @@ otp_release:
 - 17.5
 cache:
   apt: true
+  directories:
+    - "${HOME}/otp"
 before_deploy:
   - make release
   - tar cvfz estuary-${TRAVIS_TAG}.tar.gz -C _rel .
