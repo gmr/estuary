@@ -1,0 +1,17 @@
+sudo: false
+language: erlang
+otp_release:
+- 17.5
+cache:
+  apt: true
+before_deploy:
+  - make release
+  - tar cvfz estuary-${TRAVIS_TAG}.tar.gz -C _rel .
+deploy:
+  provider: releases
+  api_key:
+    secure: mL2+qTuHEbdRvOZ2ilLPYKogo3Nu/E9HuvVk+0DPCEvY8+Y2cy+gD2mtPA7V9oLKeY/AQhQEPFL1XyczRFeJkxAg5Lbp2tH8n20xQn4A+QWdfgvrh+7DBJAlPzSsbFM5t7TFFTk/4Pq5nqrjQiB+NlAqZCT7JOQPb6nvtzAgEAU=
+  file: estuary-${TRAVIS_TAG}.tar.gz
+  on:
+    repo: gmr/estuary
+    tags: true
