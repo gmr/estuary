@@ -33,10 +33,9 @@ could resemble this schema from the
     {
       "type": "record",
       "name": "LongList",
-      "aliases": ["LinkedLongs"],                      // old name for this
       "fields" : [
-        {"name": "value", "type": "long"},             // each element has a long
-        {"name": "next", "type": ["null", "LongList"]} // optional next element
+        {"name": "value", "type": "long"},
+        {"name": "next", "type": ["null", "LongList"]}
       ]
     }
 
@@ -50,7 +49,8 @@ The following configuration file will try and fetch Avro schema files from the
 to retrieve it from a `Consul <https://consul.io>`_ KV database. Container files
 will be stored both locally and in Amazon S3. The storage paths include escape
 sequences for creating a dynamic path with elements of the current time, message
-type, and hostname.
+type, and hostname. Container files themselves will be stored as ``<epoch>.avro``
+where ``<epoch>`` is the UNIX timestamp of when the container file is created.
 
 .. code:: yaml
 
