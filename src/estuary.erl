@@ -9,7 +9,7 @@
 
 -export([start/0, start/2, stop/1]).
 
--define(PATHS, ["estuary.yaml", "/etc/estuary.yaml"]).
+-define(PATHS, ["estuary.yaml", "/etc/estuary.yaml", "/etc/estuary/estuary.yaml"]).
 
 -include_lib("yamerl/include/yamerl_errors.hrl").
 
