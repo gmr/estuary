@@ -92,21 +92,21 @@ Storage Path Formatting
 ^^^^^^^^^^^^^^^^^^^^^^^
 The following are the escape sequences supported for storage paths:
 
-+-------------+---------------------------------------------------+
-| Variable    | Description                                       |
-+=============+===================================================+
-| ``%y``      | Two digit representation of the year              |
-+-------------+---------------------------------------------------+
-| ``%Y``      | Four digit representation of the year             |
-+-------------+---------------------------------------------------+
-| ``%m``      | Two digit representation of the month             |
-+-------------+---------------------------------------------------+
-| ``%d``      | Two-digit day of the month (with leading zeros)   |
-+-------------+---------------------------------------------------+
-| ``%k``      | Two digit representation of the hour in 24-hour   |
-|             | format, with a space preceding single digits      |
-+-------------+---------------------------------------------------+
-| ``%{type}`` | The Avro event type                               |
-+-------------+---------------------------------------------------+
-| ``%{host}`` | The operating system hostname                     |
-+-------------+---------------------------------------------------+
++--------------+---------------------------------------------------+
+| Variable     | Description                                       |
++==============+===================================================+
+| ``%y``       | Two digit representation of the year              |
++--------------+---------------------------------------------------+
+| ``%Y``       | Four digit representation of the year             |
++--------------+---------------------------------------------------+
+| ``%m``       | Two digit representation of the month             |
++--------------+---------------------------------------------------+
+| ``%d``       | Two-digit day of the month (with leading zeros)   |
++--------------+---------------------------------------------------+
+| ``%k``       | Two digit representation of the hour in 24-hour   |
+|              | format, with a space preceding single digits      |
++--------------+---------------------------------------------------+
+| ``%{type}``  | The Avro event type                               |
++--------------+---------------------------------------------------+
+| ``%{host}``  | The operating system hostname                     |
++--------------+---------------------------------------------------+
