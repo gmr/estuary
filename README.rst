@@ -89,7 +89,7 @@ where ``<epoch>`` is the UNIX timestamp of when the container file is created.
         path: /%Y/%m/%d/%k/%{type}/%{host}
 
 Storage Path Formatting
------------------------
+^^^^^^^^^^^^^^^^^^^^^^^
 The following are the escape sequences supported for storage paths:
 
 +-------------+---------------------------------------------------+
