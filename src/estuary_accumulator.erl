@@ -15,6 +15,8 @@
          handle_cast/2,
          handle_info/2]).
 
+-include("estuary.hrl").
+
 -record(state, {queues}).
 
 start_link() ->
@@ -31,7 +33,7 @@ code_change(_, _, State) ->
 
 handle_call({process, ContentType, Type, _Payload}, _From, State) ->
   case ContentType of
-    <<"application/vnd.apache.avro.datum">> ->
+    ?DATUM_MIME_TYPE ->
       lager:debug("Type: ~s", [Type]);
     Other ->
       lager:error("Unsupported content type: ~s", [Other])
