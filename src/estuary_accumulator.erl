@@ -3,7 +3,7 @@
 %% @copyright 2015 AWeber Communications
 %% @end
 %% =============================================================================
--module(estuary_aggregator).
+-module(estuary_accumulator).
 
 -behavior(gen_server).
 
@@ -32,7 +32,7 @@ code_change(_, _, State) ->
 handle_call({process, ContentType, Type, _Payload}, _From, State) ->
   case ContentType of
     <<"application/vnd.apache.avro.datum">> ->
-      lager:info("Type: ~s", [Type]);
+      lager:debug("Type: ~s", [Type]);
     Other ->
       lager:error("Unsupported content type: ~s", [Other])
   end,
