@@ -8,8 +8,7 @@
 %% API
 -export([as_atom/1,
          as_integer/1,
-         as_string/1,
-         hostname/0]).
+         as_string/1]).
 
 
 %% @spec as_atom(Value) -> list()
@@ -51,12 +50,3 @@ as_string(Value) when is_list(Value) =:= true -> Value;
 as_string(Value) ->
   autocluster_log:error("Unexpected data type for list value: ~p~n", [Value]),
   Value.
-
-
-%% @spec hostname(mixed) -> string()
-%% @doc Return the machine's hostname
-%% @end
-%%
-hostname() ->
-  {ok, Hostname} = inet:gethostname(),
-  Hostname.
