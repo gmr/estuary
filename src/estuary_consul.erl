@@ -5,7 +5,6 @@
 %% =============================================================================
 -module(estuary_consul).
 
-%% API
 -export([fetch_schema/1]).
 
 -include("estuary.hrl").
@@ -13,12 +12,12 @@
 -define(DEFAULT_SCHEME, "http").
 -define(DEFAULT_HOST,   "localhost").
 -define(DEFAULT_PORT,   8500).
--define(PATH_TEMPLATE,  "/v1/kv/~s/~s.avsc").
+-define(KV_PATH,        "v1/kv").
+-define(FILE_EXTENSION, "avsc").
+
 
 fetch_schema(_Name) ->
-  {ok, none}.
-
-
+    {ok, none}.
 
 
 %% @spec build_path(list()) -> string()
@@ -26,7 +25,7 @@ fetch_schema(_Name) ->
 %% @end
 %%
 build_path(Args) ->
-  build_path(Args, []).
+    build_path(Args, []).
 
 
 %% @spec build_path(string(), string()) -> string()
@@ -34,7 +33,7 @@ build_path(Args) ->
 %% @end
 %%
 build_path([Part|Parts], Path) ->
-  build_path(Parts, string:join([Path, percent_encode(Part)], "/"));
+    build_path(Parts, string:join([Path, percent_encode(Part)], "/"));
 build_path([], Path) -> Path.
 
 
@@ -49,11 +48,11 @@ build_path([], Path) -> Path.
 %% @end
 %%
 get(Scheme, Host, Port, Path, Args) ->
-  URL = build_uri(Scheme, Host, Port, Path, Args),
-  lager:debug("GET ~s", [URL]),
-  Response = httpc:request(URL),
-  lager:debug("Response: [~p]", [Response]),
-  parse_response(Response).
+    URL = build_uri(Scheme, Host, Port, Path, Args),
+    lager:debug("GET ~s", [URL]),
+    Response = httpc:request(URL),
+    lager:debug("Response: [~p]", [Response]),
+    parse_response(Response).
 
 
 %% @spec build_uri(Scheme, Host, Port, Path, QArgs) -> string()
@@ -66,7 +65,7 @@ get(Scheme, Host, Port, Path, Args) ->
 %% @end
 %%
 build_uri(Scheme, Host, Port, Path, QArgs) ->
-  build_uri(string:join([Scheme, "://", Host, ":", estuary_util:as_string(Port)], ""), Path, QArgs).
+    build_uri(string:join([Scheme, "://", Host, ":", estuary_util:as_string(Port)], ""), Path, QArgs).
 
 
 %% @spec build_uri(string(), string(), proplist()) -> string()
@@ -74,10 +73,10 @@ build_uri(Scheme, Host, Port, Path, QArgs) ->
 %% @end
 %%
 build_uri(Base, Path, []) ->
-  string:join([Base, build_path(Path)], "");
+    string:join([Base, build_path(Path)], "");
 build_uri(Base, Path, QArgs) ->
-  string:join([Base, string:join([build_path(Path),
-                                  build_query(QArgs)], "?")], "").
+    string:join([Base, string:join([build_path(Path),
+                                    build_query(QArgs)], "?")], "").
 
 
 %% @spec build_query(proplist()) -> string()
@@ -85,7 +84,7 @@ build_uri(Base, Path, QArgs) ->
 %% @end
 %%
 build_query(Args) ->
-  build_query(Args, []).
+    build_query(Args, []).
 
 
 %% @spec build_query(proplist(), string()) -> string()
@@ -93,15 +92,15 @@ build_query(Args) ->
 %% @end
 %%
 build_query([{Key,Value}|Args], Parts) when is_atom(Key) =:= true ->
-  build_query(Args, lists:merge(Parts, [string:join([percent_encode(Key),
-                                                     percent_encode(Value)], "=")]));
+    build_query(Args, lists:merge(Parts, [string:join([percent_encode(Key),
+                                                       percent_encode(Value)], "=")]));
 build_query([{Key,Value}|Args], Parts) ->
-  build_query(Args, lists:merge(Parts, [string:join([percent_encode(Key),
-                                                     percent_encode(Value)], "=")]));
+    build_query(Args, lists:merge(Parts, [string:join([percent_encode(Key),
+                                                       percent_encode(Value)], "=")]));
 build_query([Key|Args], Parts) ->
-  build_query(Args, lists:merge(Parts, [percent_encode(Key)]));
+    build_query(Args, lists:merge(Parts, [percent_encode(Key)]));
 build_query([], Parts) ->
-  string:join(Parts, "&").
+    string:join(Parts, "&").
 
 
 %% @spec decode_body(mixed) -> list()
@@ -110,10 +109,10 @@ build_query([], Parts) ->
 %%
 decode_body(_, []) -> [];
 decode_body(?JSON_MIME_TYPE, Body) ->
-  case rabbit_misc:json_decode(estuary_util:as_string(Body)) of
-    {ok, Value} -> Value;
-    error       -> []
-  end.
+    case rabbit_misc:json_decode(estuary_util:as_string(Body)) of
+        {ok, Value} -> Value;
+        error       -> []
+    end.
 
 
 %% @spec parse_response(Response) -> {ok, string()} | {error, mixed}
@@ -122,24 +121,24 @@ decode_body(?JSON_MIME_TYPE, Body) ->
 %% @end
 %%
 parse_response({error, Reason}) ->
-  lager:error("HTTP Error ~p", [Reason]),
-  {error, Reason};
+    lager:error("HTTP Error ~p", [Reason]),
+    {error, Reason};
 
 parse_response({ok, 200, Body})  -> {ok, decode_body(?JSON_MIME_TYPE, Body)};
 parse_response({ok, 201, Body})  -> {ok, decode_body(?JSON_MIME_TYPE, Body)};
 parse_response({ok, 204, _})     -> {ok, []};
 parse_response({ok, Code, Body}) ->
-  lager:error("HTTP Response (~p) ~s", [Code, Body]),
-  {error, integer_to_list(Code)};
+    lager:error("HTTP Response (~p) ~s", [Code, Body]),
+    {error, integer_to_list(Code)};
 
 parse_response({ok, {{_,200,_},Headers,Body}}) ->
-  {ok, decode_body(proplists:get_value("content-type", Headers, ?JSON_MIME_TYPE), Body)};
+    {ok, decode_body(proplists:get_value("content-type", Headers, ?JSON_MIME_TYPE), Body)};
 parse_response({ok,{{_,201,_},Headers,Body}}) ->
-  {ok, decode_body(proplists:get_value("content-type", Headers, ?JSON_MIME_TYPE), Body)};
+    {ok, decode_body(proplists:get_value("content-type", Headers, ?JSON_MIME_TYPE), Body)};
 parse_response({ok,{{_,204,_},_,_}}) -> {ok, []};
 parse_response({ok,{{_Vsn,Code,_Reason},_,Body}}) ->
-  lager:error("HTTP Response (~p) ~s", [Code, Body]),
-  {error, integer_to_list(Code)}.
+    lager:error("HTTP Response (~p) ~s", [Code, Body]),
+    {error, integer_to_list(Code)}.
 
 
 %% @spec percent_encode(Value) -> string()
@@ -150,4 +149,4 @@ parse_response({ok,{{_Vsn,Code,_Reason},_,Body}}) ->
 %% @end
 %%
 percent_encode(Value) ->
-  http_uri:encode(estuary_util:as_string(Value)).
+    http_uri:encode(estuary_util:as_string(Value)).

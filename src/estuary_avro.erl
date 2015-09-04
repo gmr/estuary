@@ -23,31 +23,33 @@
 -record(state, {type, path, template, schemas}).
 
 start_link(Config) ->
-  gen_server:start_link({local, ?MODULE}, ?MODULE, Config, []).
+    gen_server:start_link({local, ?MODULE}, ?MODULE, Config, []).
 
 init(Config) ->
-  case proplists:get_value("type", Config, ?DEFAULT_TYPE) of
-    "file"   ->
-      {ok, #state{type=file, path=proplists:get_value("path", Config, ?DEFAULT_PATH), schemas=[]}};
-    "consul" ->
-      %%Template = url_template(Config),
-      {ok, #state{type=consul, schemas=[]}}
-  end.
+    case proplists:get_value("type", Config, ?DEFAULT_TYPE) of
+        "file"   ->
+            {ok, #state{type=file,
+                        path=proplists:get_value("path", Config, ?DEFAULT_PATH),
+                        schemas=[]}};
+        "consul" ->
+            %%Template = url_template(Config),
+            {ok, #state{type=consul, schemas=[]}}
+    end.
 
 terminate(_, _) ->
-  ok.
+    ok.
 
 code_change(_, _, State) ->
-  {ok, State}.
+    {ok, State}.
 
 handle_call({get, Schema}, _, State) ->
-  {reply, proplists:get_value(Schema, State#state.schemas), State};
+    {reply, proplists:get_value(Schema, State#state.schemas), State};
 
 handle_call(_, _, State) ->
-  {noreply, State}.
+    {noreply, State}.
 
 handle_cast(_, State) ->
-  {noreply, State}.
+    {noreply, State}.
 
 handle_info(_, State) ->
-  {noreply, State}.
+    {noreply, State}.

@@ -17,34 +17,35 @@
 
 -include("estuary.hrl").
 
--record(state, {queues}).
+-record(state, {children}).
 
 start_link() ->
-  wpool:start_pool(?MODULE, [{workers, 25}, {worker, {?MODULE, []}}]).
+    gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
 init([]) ->
-  {ok, #state{}}.
+    {ok, #state{children=[]}}.
 
 terminate(_, _) ->
-  ok.
+    ok.
 
 code_change(_, _, State) ->
-  {ok, State}.
+    {ok, State}.
 
 handle_call({process, ContentType, Type, _Payload}, _From, State) ->
-  case ContentType of
-    ?DATUM_MIME_TYPE ->
-      lager:debug("Type: ~s", [Type]);
-    Other ->
-      lager:error("Unsupported content type: ~s", [Other])
-  end,
-  {reply, ok, State};
+    case ContentType of
+        ?DATUM_MIME_TYPE ->
+            lager:debug("Type: ~s", [Type]),
+            {reply, ok, State};
+        Other ->
+            lager:error("Unsupported content type: ~s", [Other]),
+            {reply, error, State}
+    end;
 
 handle_call(_, _, State) ->
-  {noreply, State}.
+    {noreply, State}.
 
 handle_cast(_, State) ->
-  {noreply, State}.
+    {noreply, State}.
 
 handle_info(_, State) ->
-  {noreply, State}.
+    {noreply, State}.

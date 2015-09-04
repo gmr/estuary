@@ -1,3 +1,8 @@
+%% =============================================================================
+%% @author Gavin M. Roy <gavinr@aweber.com>
+%% @copyright 2015 AWeber Communications
+%% @end
+%% =============================================================================
 -module(estuary_storage_local).
 
 -behaviour(gen_server).
@@ -14,22 +19,22 @@
 -record(state, {config}).
 
 start_link(Config) ->
-  gen_server:start_link({local, ?MODULE}, ?MODULE, Config, []).
+    gen_server:start_link({local, ?MODULE}, ?MODULE, Config, []).
 
 init(Config) ->
-  {ok, #state{config=Config}}.
+    {ok, #state{config=Config}}.
 
 handle_call(_Request, _From, State) ->
-  {reply, ok, State}.
+    {reply, ok, State}.
 
 handle_cast(_Request, State) ->
-  {noreply, State}.
+    {noreply, State}.
 
 handle_info(_Info, State) ->
-  {noreply, State}.
+    {noreply, State}.
 
 terminate(_Reason, _State) ->
-  ok.
+    ok.
 
 code_change(_OldVsn, State, _Extra) ->
-  {ok, State}.
+    {ok, State}.

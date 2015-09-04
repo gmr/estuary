@@ -2,7 +2,6 @@
 
 -include_lib("eunit/include/eunit.hrl").
 
-
 all_fields_test() ->
   Datetime = {{2002,12,20},{7,46,0}},
   Path = "/%Y/%y/%m/%d/%H/%{type}/%{host}",

@@ -4,9 +4,7 @@
 %% @end
 %% =============================================================================
 -module(estuary_path).
--author("gavinr").
 
-%% API
 -export([format/2, format/3]).
 
 -define(CONVERSION_SPECIFICATIONS, ["%{host}", "%{type}"]).
@@ -20,7 +18,7 @@
 %% @end
 %%
 format(Path, Type) ->
-  format(Path, Type, calendar:universal_time()).
+    format(Path, Type, calendar:universal_time()).
 
 
 %% @spec format(Path, Type, Datetime) -> string()
@@ -32,8 +30,8 @@ format(Path, Type) ->
 %% @end
 %%
 format(Path, Type, Datetime) ->
-  Path1 = strftimerl:format(Path, Datetime),
-  {ok, replace(?CONVERSION_SPECIFICATIONS, Type, Datetime, Path1)}.
+    Path1 = strftimerl:format(Path, Datetime),
+    {ok, replace(?CONVERSION_SPECIFICATIONS, Type, Datetime, Path1)}.
 
 
 %% @private
@@ -42,8 +40,8 @@ format(Path, Type, Datetime) ->
 %% @end
 %%
 hostname() ->
-  {ok, Hostname} = inet:gethostname(),
-  Hostname.
+    {ok, Hostname} = inet:gethostname(),
+    Hostname.
 
 
 %% @private
@@ -54,13 +52,13 @@ hostname() ->
 replace([], _, _, Path) -> Path;
 
 replace([H|T], Type, Datetime, Path) when H == "%{host}" ->
-  Value = re:replace(Path, "%\{host\}", hostname(), [global, {return, list}]),
-  replace(T, Type, Datetime, Value);
+    Value = re:replace(Path, "%\{host\}", hostname(), [global, {return, list}]),
+    replace(T, Type, Datetime, Value);
 
 replace([H|T], Type, Datetime, Path) when H == "%{type}" ->
-  Value = re:replace(Path, "%\{type\}", estuary_util:as_string(Type), [global, {return, list}]),
-  replace(T, Type, Datetime, Value);
+    Value = re:replace(Path, "%\{type\}", estuary_util:as_string(Type), [global, {return, list}]),
+    replace(T, Type, Datetime, Value);
 
 replace([H|T], Type, Datetime, Path) ->
-  lager:warning("Unsupported specifier ~s", [H]),
-  replace(T, Type, Datetime, Path).
+    lager:warning("Unsupported specifier ~s", [H]),
+    replace(T, Type, Datetime, Path).

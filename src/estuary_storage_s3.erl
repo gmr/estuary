@@ -1,3 +1,8 @@
+%% =============================================================================
+%% @author Gavin M. Roy <gavinr@aweber.com>
+%% @copyright 2015 AWeber Communications
+%% @end
+%% =============================================================================
 -module(estuary_storage_s3).
 
 -behaviour(gen_server).
@@ -16,28 +21,28 @@
 -record(state, {config, bucket, access_key, secret, path}).
 
 start_link(Config) ->
-  gen_server:start_link({local, ?MODULE}, ?MODULE, Config, []).
+    gen_server:start_link({local, ?MODULE}, ?MODULE, Config, []).
 
 init(Config) ->
-  {ok, #state{bucket=proplists:get_value("bucket", Config)}}.
+    {ok, #state{bucket=proplists:get_value("bucket", Config)}}.
 
 handle_call(list_buckets, _From, State) ->
-  {reply, list_buckets(), State};
+    {reply, list_buckets(), State};
 
 handle_call(_Request, _From, State) ->
-  {reply, ok, State}.
+    {reply, ok, State}.
 
 handle_cast(_Request, State) ->
-  {noreply, State}.
+    {noreply, State}.
 
 handle_info(_Info, State) ->
-  {noreply, State}.
+    {noreply, State}.
 
 terminate(_Reason, _State) ->
-  ok.
+    ok.
 
 code_change(_OldVsn, State, _Extra) ->
-  {ok, State}.
+    {ok, State}.
 
 list_buckets() ->
-  erlcloud_s3:list_buckets().
+    erlcloud_s3:list_buckets().
