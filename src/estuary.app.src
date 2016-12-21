@@ -11,7 +11,7 @@
     folsom,
     rabbit_common,
     amqp_client,
-    erlcloud,
+    httpc_aws,
     eavro,
     yamerl,
     worker_pool
