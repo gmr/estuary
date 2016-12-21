@@ -15,7 +15,7 @@
          handle_cast/2,
          handle_info/2]).
 
--include_lib("deps/eavro/include/eavro.hrl").
+-include_lib("eavro/include/eavro.hrl").
 
 -define(DEFAULT_TYPE,   "file").
 -define(DEFAULT_PATH,   "schemas").
@@ -30,10 +30,7 @@ init(Config) ->
         "file"   ->
             {ok, #state{type=file,
                         path=proplists:get_value("path", Config, ?DEFAULT_PATH),
-                        schemas=[]}};
-        "consul" ->
-            %%Template = url_template(Config),
-            {ok, #state{type=consul, schemas=[]}}
+                        schemas=[]}}
     end.
 
 terminate(_, _) ->
@@ -43,6 +40,9 @@ code_change(_, _, State) ->
     {ok, State}.
 
 handle_call({get, Schema}, _, State) ->
+    {reply, proplists:get_value(Schema, State#state.schemas), State};
+
+handle_call({decode, Schema}, _, State) ->
     {reply, proplists:get_value(Schema, State#state.schemas), State};
 
 handle_call(_, _, State) ->
