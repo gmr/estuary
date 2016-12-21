@@ -16,8 +16,6 @@
          terminate/2,
          code_change/3]).
 
--include_lib("erlcloud/include/erlcloud_aws.hrl").
-
 -record(state, {config, bucket, access_key, secret, path}).
 
 start_link(Config) ->
